@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.format.Printer;
 
 import ex.AppCtx;
 import ex.Assembler;
@@ -14,6 +15,7 @@ import ex.DuplicateMemberException;
 import ex.MemberNotFoundException;
 import ex.MemberRegisterService;
 import ex.RegisterRequest;
+import ex.VersionPrinter;
 import ex.WrongIdPassWordException;
 
 public class MainForSpring {
@@ -47,7 +49,6 @@ public class MainForSpring {
 				break;
 			}
 			if(command.startsWith("new ")) {
-				
 				processNewCommand(command.split(" "));
 				continue;
 			} else if (command.startsWith("change")) {
@@ -72,7 +73,6 @@ public class MainForSpring {
 			printHelp();
 			return;
 		}
-
 		//		MemberRegisterService regSvc = assembler.getMemberRegisterService();
 
 		MemberRegisterService regSvc =
@@ -101,7 +101,6 @@ public class MainForSpring {
 
 	private static void processChangeCommand(String[] arg) {	
 		if(arg.length!=4) {
-
 			printHelp();
 			return;
 		}
@@ -109,7 +108,6 @@ public class MainForSpring {
 
 		ChangePasswordService changePwdSvc =
 				ctx.getBean("changePwdSvc", ChangePasswordService.class);
-
 
 		try {
 			changePwdSvc.changePassword(arg[1], arg[2], arg[3]);
@@ -120,6 +118,14 @@ public class MainForSpring {
 			System.out.println("이메일과 암호가 일치하지 않습니다. \n");
 		}
 	}
+
+	private static void processVersionCommand() {
+		VersionPrinter versionPrinter = 
+				ctx.getBean("versionPrint", VersionPrinter.class);
+		
+		versionPrinter.print();
+	}
+
 
 	private static void printHelp() {
 		System.out.println();
